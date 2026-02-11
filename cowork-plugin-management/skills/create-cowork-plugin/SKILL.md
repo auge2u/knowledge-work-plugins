@@ -96,13 +96,15 @@ Detailed schemas for each component type are in `references/component-schemas.md
 This schema is shared with Claude Code's plugin system, but you're creating a plugin for Claude Cowork, a desktop app for doing knowledge work.
 Cowork users will usually find commands and skills the most useful.
 
-### Customizable plugins
+### Customizable plugins with `~~` placeholders
 
-When a plugin is intended to be shared with others, it might have parts that need to be adapted to individual users. You might need to reference external tools by category rather than specific product (e.g., "project tracker" instead of "Jira"), and you might need to list multiple options for company policies (e.g. using story points vs. using T-shirt sizes for estimation.) When sharing is needed, use generic language and mark these as requiring customization with two tilde characters such as `~~project tracker` and `~~determine issue size`.
+> **Do not use or ask about this pattern by default.** Only introduce `~~` placeholders if the user explicitly says they want people outside their organization to use the plugin.
+> You can mention this is an option if it seems like the user wants to distribute the plugin externally, but do not proactively ask about this with AskUserQuestion.
 
-> **Do not use this pattern by default.** Only introduce `~~` placeholders if the user explicitly says they want others to use the plugin. In that case, ask which parts of the plugin should be customizable by other users (e.g., which tools or services could vary), and only add placeholders for those parts.
-
-If you need to use tool categories, write a `CONNECTORS.md` file at the plugin root to explain:
+When a plugin is intended to be shared with others outside their company, it might have parts that need to be adapted to individual users.
+You might need to reference external tools by category rather than specific product (e.g., "project tracker" instead of "Jira").
+When sharing is needed, use generic language and mark these as requiring customization with two tilde characters such as `create an issue in ~~project tracker`.
+If used any tool categories, write a `CONNECTORS.md` file at the plugin root to explain:
 
 ```markdown
 # Connectors
@@ -126,6 +128,8 @@ workflows in terms of categories rather than specific products.
 Use `${CLAUDE_PLUGIN_ROOT}` for all intra-plugin path references in hooks and MCP configs. Never hardcode absolute paths.
 
 ## Guided Workflow
+
+When you ask the user something, use AskUserQuestion. Don't assume "industry standard" defaults are correct. Note: AskUserQuestion always includes a Skip button and a free-text input box for custom answers, so do not include `None` or `Other` as options.
 
 ### Phase 1: Discovery
 
