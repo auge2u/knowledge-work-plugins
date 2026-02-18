@@ -2,9 +2,8 @@
 name: cowork-plugin-customizer
 description: >
   Customize a Claude Code plugin for a specific organization's tools and workflows.
-  Use when users want to customize a plugin — whether it's a generic template with placeholders or an already-configured plugin they want to tweak.
-  Also use when users want to customize a specific part of a plugin (e.g., connectors, skill, commands, agents).
-  This skill requires Cowork mode with mounted plugin directories and will not work in remote or standard CLI sessions.
+  Use when: customize plugin, set up plugin, configure plugin, tailor plugin, adjust plugin settings,
+  customize plugin connectors, customize plugin skill, customize plugin command, tweak plugin, modify plugin configuration.
 compatibility: Requires Cowork desktop app environment with access to mounted plugin directories (mnt/.local-plugins, mnt/.plugins).
 ---
 
@@ -16,13 +15,15 @@ Customize a plugin for a specific organization — either by setting up a generi
 
 ## Determining the Customization Mode
 
-After locating the plugin, determine what kind of customization is needed:
+After locating the plugin, check for `~~`-prefixed placeholders: `grep -rn '~~\w' /path/to/plugin --include='*.md' --include='*.json'`
 
-**1. Scoped customization** — The user asked to customize a specific part of the plugin (e.g., "customize the connectors", "update the standup command", "change the ticket tool"). Read the plugin files to find the relevant section(s) and focus only on those. Do not scan the entire plugin or present unrelated customization items.
+> **Default rule**: If `~~` placeholders exist, always use **Generic plugin setup** mode — even if the user asked about a specific part of the plugin. Placeholders indicate the plugin hasn't been fully set up yet, and skipping them risks leaving the plugin in a broken state. After all placeholders are resolved, address any additional scoped request the user made.
 
-**2. Generic plugin setup** — The plugin contains `~~`-prefixed placeholders (check with `grep -rn '~~\w' /path/to/plugin --include='*.md' --include='*.json'`). These are customization points in a template that need to be replaced with real values (e.g., `~~Jira` → `Asana`, `~~your-team-channel` → `#engineering`).
+**1. Generic plugin setup** — The plugin contains `~~`-prefixed placeholders. These are customization points in a template that need to be replaced with real values (e.g., `~~Jira` → `Asana`, `~~your-team-channel` → `#engineering`).
 
-**3. General customization** — The plugin is already configured (no `~~` placeholders or they've already been filled in) and the user wants to modify it. Read the plugin's files to understand its current configuration, then ask the user what they'd like to change.
+**2. Scoped customization** — No `~~` placeholders exist, and the user asked to customize a specific part of the plugin (e.g., "customize the connectors", "update the standup command", "change the ticket tool"). Read the plugin files to find the relevant section(s) and focus only on those. Do not scan the entire plugin or present unrelated customization items.
+
+**3. General customization** — No `~~` placeholders exist, and the user wants to modify the plugin broadly. Read the plugin's files to understand its current configuration, then ask the user what they'd like to change.
 
 > **Important**: Never change the name of the plugin or skill being customized. Do not rename directories, files, or the plugin/skill name fields.
 
